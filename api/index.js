@@ -1,17 +1,22 @@
-const router = require('express').Router();
-const bodyParser = require('body-parser')
+const express = require('express'),
+    router = express.Router(),
+    bodyParser = require('body-parser'),
+    PORT = process.env.PORT || 3000,
+    app = express(),
 
-const usersAPI = require('./users.routes');
+    usersAPI = require('./users.routes');
 
-module.exports = function (app) {
-    app.use("/api", router);
+// parse application/json
+app.use(bodyParser.json())
+app.use("/api", router);
 
-    // parse application/json
-    app.use(bodyParser.json())
+usersAPI(app);
 
-    router.get("/", (req, res, next) => {
-        res.send("Server works!");
-    });
+router.get("/", (req, res, next) => {
+    res.send("Server works!");
+});
 
-    usersAPI(app);
-}
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
